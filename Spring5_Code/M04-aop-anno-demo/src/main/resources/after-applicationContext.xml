@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- 开启注解扫描 -->
+    <context:component-scan base-package="com.bpf.after" />
+
+    <!-- 开启自动代理生成器
+        AspectJ 框架会寻找 Spring 容器中所有的目标对象，为每个符合切入点表达式的业务方法所在的目标对象生成一个代理对象，
+        由这个代理对象去执行增强方法和调用原来的业务方法。
+     -->
+    <aop:aspectj-autoproxy />
+</beans>

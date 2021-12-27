@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 属性注入 - XML 方式 - set 方法
+        1. 使用 <property> 标签
+            name    对应属性名
+            value   对应属性值
+            ref     对应其他的Java Bean
+        2. 注入普通类型，使用 name + value; 注入其他的Java对象，使用 name + ref
+    -->
+
+    <bean id="student" class="com.bpf.xml.setter.Student">
+        <property name="name" value="Tom"/>
+        <property name="age" value="12" />
+    </bean>
+
+    <bean id="mydate" class="java.util.Date">
+        <property name="time" value="1293798127947" />
+    </bean>
+
+    <bean id="emailStudent" class="com.bpf.xml.setter.Student">
+        <property name="name" value="Tim"/>
+        <property name="age" value="14" />
+        <property name="email" value="tom@qq.com" />
+    </bean>
+
+
+    <bean id="phone" class="com.bpf.xml.setter.Phone">
+        <property name="owner" value="Tom" />
+        <property name="provider" value="华为" />
+        <property name="card" ref="card" />
+    </bean>
+
+    <bean id="card" class="com.bpf.xml.setter.SIMCard">
+        <property name="name" value="中国电信" />
+        <property name="number" value="12448277394" />
+    </bean>
+</beans>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 属性注入 - XML 方式 - 构造器 方法
+        1. 使用 <constructor-arg> 标签
+            index   对应构造器的形参索引，从0开始
+            name    对应构造器的形参名
+            value   对应构造器的形参值
+            ref     对应其他的Java Bean
+        2. 注入普通类型，使用 name + value; 注入其他的Java对象，使用 name + ref
+    -->
+
+    <!-- 使用 name -->
+    <bean id="phone" class="com.bpf.xml.constructor.Phone">
+        <constructor-arg name="owner" value="Tom" />
+        <constructor-arg name="provider" value="小米" />
+        <constructor-arg name="card" ref="card" />
+    </bean>
+
+    <!-- 使用 index, 并且index可以省略 -->
+    <bean id="phone2" class="com.bpf.xml.constructor.Phone">
+        <constructor-arg value="Tom" />
+        <constructor-arg value="中国联通" />
+        <constructor-arg ref="card" />
+    </bean>
+
+    <bean id="card" class="com.bpf.xml.constructor.SIMCard">
+        <property name="name" value="中国电信" />
+        <property name="number" value="12448277394" />
+    </bean>
+</beans>

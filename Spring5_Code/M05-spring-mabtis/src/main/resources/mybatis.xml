@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <!-- 设置日志 -->
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+    </settings>
+
+    <!-- 别名 -->
+    <typeAliases>
+        <package name="com.bpf.bean"/>
+    </typeAliases>
+
+    <!-- 指定Mapper文件位置
+        package: 需要保证 接口 与 mapper映射文件 在同一包下，且名称相同。
+     -->
+    <mappers>
+        <package name="com.bpf.dao"/>
+    </mappers>
+</configuration>

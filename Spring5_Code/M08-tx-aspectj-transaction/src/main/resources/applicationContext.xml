@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- 引入外部配置文件 -->
+    <context:property-placeholder location="classpath:jdbc.properties" />
+
+    <!-- 配置数据源 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+    </bean>
+
+    <!-- 声明 SqlSessionFactoryBean 用来创建 SqlSessionFactory 对象 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" >
+        <!-- 指定数据源 -->
+        <property name="dataSource" ref="dataSource" />
+        <!-- 指定MyBatis配置文件 -->
+        <property name="configLocation" value="classpath:mybatis.xml" />
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer" >
+        <!-- 指定 SqlSessionFactory -->
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+        <!-- 指定 DAO 接口所在的包 -->
+        <property name="basePackage" value="com.bpf.dao" />
+    </bean>
+
+    <!-- 声明自定义 Service -->
+    <bean id="buyGoodService" class="com.bpf.service.impl.BuyGoodServiceImpl">
+        <property name="goodDao" ref="goodDao" />
+        <property name="saleDao" ref="saleDao" />
+    </bean>
+
+    <!-- 声明事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <!-- 声明业务方法的事务属性
+        在此，只声明具有某种规则方法名的方法具有哪些事务属性，而没指定具体哪些方法具有事务功能
+     -->
+    <tx:advice id="serviceAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <!--
+                tx:method  指定具有哪些规则方法名的方法的事务属性
+                    name        可以使用通配符，若只有*，表示除上述的方法之外
+                    propagation 传播行为
+                    isolation   隔离级别
+                    read-only   是否只读
+                    timeout     超时时间
+                    rollback-for 事务回滚时的异常类型列表，使用逗号(,)隔开
+            -->
+            <tx:method name="buy" propagation="REQUIRED" isolation="DEFAULT"
+                       read-only="false" timeout="20"
+                       rollback-for="java.lang.NullPointerException, com.bpf.except.GoodNotEnoughException"/>
+
+            <tx:method name="add*" propagation="REQUIRES_NEW" rollback-for="java.lang.Exception" />
+            <tx:method name="modify*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+            <tx:method name="remove*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+
+            <!-- "*" 表示除了上述方法之外使用下面的事务属性: query*, search*, find*, get* ... -->
+            <tx:method name="*" propagation="SUPPORTS" read-only="true" />
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <!-- 声明切入点表达式：表示任何包下的service下的任何方法 -->
+        <aop:pointcut id="servicePoint" expression="execution(* *..service..*.*(..))"/>
+
+        <!-- 关联切入点表达式 与 事务通知 -->
+        <aop:advisor advice-ref="serviceAdvice" pointcut-ref="servicePoint" />
+    </aop:config>
+</beans>

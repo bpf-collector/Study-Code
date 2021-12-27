@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- bean标签
+        id      自定义对象的名称，保持唯一。
+        class   自定义对象的全限定类名，不能是接口。
+
+        >>> Spring 根据 id 和 class 创建对象，并将对象放入一个 map 对象中。
+    -->
+    <bean id="someService" class="com.bpf.service.impl.SomeServiceImpl" />
+    <bean id="someService1" class="com.bpf.service.impl.SomeServiceImpl" />
+
+    <bean id="mydate" class="java.util.Date" />
+</beans>

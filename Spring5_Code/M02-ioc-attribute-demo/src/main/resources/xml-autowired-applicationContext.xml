@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 属性注入 - XML 方式 - 引用类型自动注入 方法
+        在 bean 标签中使用 autowired属性设置。
+        byName: 根据名称注入。当配置文件中bean标签的id值与对象的属性名匹配且属于同个类型时，可以进行注入。
+        byType: 根据类型注入。当配置文件中bean标签的class值与对象的属性类型同源时，可以进行注入。
+            bean标签的class值与对象的属性类型 相同 时。
+            bean标签的class值与对象的属性类型存在 父子关系 时。
+            bean标签的class值与对象的属性类型存在 接口-实现类关系 时。
+    -->
+
+    <!-- byName: 只会匹配 id="card" -->
+    <bean id="phone1" class="com.bpf.xml.autowired.Phone" autowire="byName">
+        <property name="owner" value="Marry" />
+        <property name="provider" value="魅族" />
+    </bean>
+
+    <bean id="card" class="com.bpf.xml.autowired.SIMCard">
+        <property name="name" value="中国移动" />
+        <property name="number" value="12434424734" />
+    </bean>
+
+    <!---->
+    <bean id="phone2" class="com.bpf.xml.autowired.Phone" autowire="byType">
+        <property name="owner" value="Kate" />
+        <property name="provider" value="索爱" />
+    </bean>
+</beans>
